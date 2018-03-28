@@ -1,0 +1,8 @@
+get npm
+add browserify: npm install -g browserify
+add uglify: npm install -g uglify-js
+
+npm install
+browserify colx.input.js | uglifyjs > ..\wwwroot\colx.js
+
+or just double click the generate-colx.js.cmd file once everything is setup.
