@@ -1,4 +1,4 @@
-﻿namespace mycolxwallet.org.Models
+﻿namespace mypivxwallet.org.Models
 {
 	public class TxInput
 	{

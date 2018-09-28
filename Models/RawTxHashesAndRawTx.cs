@@ -1,4 +1,4 @@
-﻿namespace mycolxwallet.org.Models
+﻿namespace mypivxallet.org.Models
 {
 	public class RawTxHashesAndRawTx
 	{
