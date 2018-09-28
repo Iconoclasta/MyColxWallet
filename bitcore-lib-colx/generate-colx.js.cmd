@@ -1,1 +1,0 @@
-browserify colx.input.js | uglifyjs > ..\wwwroot\colx.js

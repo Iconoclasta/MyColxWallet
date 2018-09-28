@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace mycolxwallet.org
+namespace mypivxallet.org
 {
 	public class Program
 	{

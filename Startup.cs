@@ -1,10 +1,10 @@
-using mycolxwallet.org.Models;
+using mypivxwallet.org.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace mycolxwallet.org
+namespace mypivxXwallet.org
 {
 	public class Startup
 	{
@@ -14,7 +14,7 @@ namespace mycolxwallet.org
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddMvc();
-			services.AddSingleton<ColxNode>();
+			services.AddSingleton<PIVXNode>();
 		}
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)

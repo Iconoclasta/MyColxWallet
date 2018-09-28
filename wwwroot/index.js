@@ -1,7 +1,7 @@
 ﻿function goToSendPanel(successfullyConnectedMessage) {
 	$("#main-panel").hide();
 	$("#send-panel").show();
-	$("#title").text("Send COLX");
+	$("#title").text("Send PIVX");
 	$("#response").show().css("color", "yellow").html(successfullyConnectedMessage);
 	$("#resultPanel").text("");
 	$("#main-page-title").text("Close Wallet");
@@ -56,7 +56,7 @@ function isValidAddress(address) {
 }
 
 function updateLocalStorageBalances() {
-	localStorage.setItem('address', colxKeystoreWallet.address);
+	localStorage.setItem('address', PIVXKeystoreWallet.address);
 	localStorage.setItem('addressBalance', addressBalance);
 	return addressBalance;
 }
@@ -104,11 +104,11 @@ function crossDomainAjax(url, successCallback, errorCallback) {
 	});
 }
 
-// Loops through all known COLX addresses and checks the balance and sums up to total amount we got
+// Loops through all known PIVX addresses and checks the balance and sums up to total amount we got
 function balanceCheck() {
 	//keep displaying: document.getElementById("refreshing-amount-timeout").style.display = "none";
-	if (isValidAddress(colxKeystoreWallet.address)) {
-		crossDomainAjax("https://chainz.cryptoid.info/colx/api.dws?q=getbalance&a=" + colxKeystoreWallet.address,
+	if (isValidAddress(PIVXKeystoreWallet.address)) {
+		crossDomainAjax("https://chainz.cryptoid.info/PIVX/api.dws?q=getbalance&a=" + PIVXKeystoreWallet.address,
 			function (data, status) {
 				if (status === "success" && data !== "ERROR: address invalid" && addressBalance !== parseFloat(data)) {
 					addressBalance = parseFloat(data);
@@ -132,7 +132,7 @@ function tryBalanceCheck() {
 
 function updateLocalStorageBalancesAndRefreshTotalAmountAndReceivingAddresses() {
 	var totalAmount = updateLocalStorageBalances();
-	document.getElementById("totalAmountCOLX").innerHTML = showNumber(totalAmount, 8);
+	document.getElementById("totalAmountPIVX").innerHTML = showNumber(totalAmount, 8);
 // ReSharper disable UseOfImplicitGlobalInFunctionScope
 	document.getElementById("totalAmountUsd").innerHTML = showNumber(totalAmount * usdRate, 2);
 	document.getElementById("totalAmountEur").innerHTML = showNumber(totalAmount * eurRate, 2);
@@ -140,23 +140,23 @@ function updateLocalStorageBalancesAndRefreshTotalAmountAndReceivingAddresses() 
 }
 
 function addAddressBalance(list, address, balance, freshestAddress) {
-	var qrImg = "//chart.googleapis.com/chart?cht=qr&chl=colx:" + address + "&choe=UTF-8&chs=140x140&chld=L|0";
-	$("<li><a href='https://chainz.cryptoid.info/colx/address.dws?" + address +
+	var qrImg = "//chart.googleapis.com/chart?cht=qr&chl=PIVX:" + address + "&choe=UTF-8&chs=140x140&chld=L|0";
+	$("<li><a href='https://chainz.cryptoid.info/PIVX/address.dws?" + address +
 		"' target='_blank' rel='noopener noreferrer'>" +
 		(address === freshestAddress
 			? "<img width='140' height='140' src='" +
 			qrImg +
-			"' title='Your freshest COLX Address should be used for receiving COLX, if you wallet support it you will get a new one once this has been used!' /><br/>"
+			"' title='Your freshest PIVX Address should be used for receiving PIVX, if you wallet support it you will get a new one once this has been used!' /><br/>"
 			: "") +
 		address +
 		"</a><div class='address-amount' onclick='setAmountToSend(" + balance + ")'>" +
-		showNumber(balance) + " COLX</div></li>").prependTo(list);
+		showNumber(balance) + " PIVX</div></li>").prependTo(list);
 }
 
 function generateReceivingAddressList() {
 	var list = $("#addressList");
 	list.empty();
-	addAddressBalance(list, colxKeystoreWallet.address, addressBalance, colxKeystoreWallet.address);
+	addAddressBalance(list, PIVXKeystoreWallet.address, addressBalance, PIVXKeystoreWallet.address);
 }
 
 function setAddressAndLookForLastUsedHdWalletAddress(firstAddress) {
@@ -174,11 +174,11 @@ function setAddressAndLookForLastUsedHdWalletAddress(firstAddress) {
 }
 
 function updateBalanceIfAddressIsUsed(newAddress) {
-	crossDomainAjax("https://chainz.cryptoid.info/colx/api.dws?q=getreceivedbyaddress&a=" + newAddress,
+	crossDomainAjax("https://chainz.cryptoid.info/PIVX/api.dws?q=getreceivedbyaddress&a=" + newAddress,
 		function (data) {
 			if (data !== "ERROR: address invalid") {
 				if (!addressBalance) {
-					//console.log("Found new COLX Address: " + newAddress);
+					//console.log("Found new PIVX Address: " + newAddress);
 					addressBalance = 0;
 					// Update storage to not query this next time if this is in fact the newest empty address
 					updateLocalStorageBalances();
@@ -192,7 +192,7 @@ function updateBalanceIfAddressIsUsed(newAddress) {
 }
 
 function setTotalAmountToSend() {
-	setAmountToSend(parseFloat($("#totalAmountCOLX").text()));
+	setAmountToSend(parseFloat($("#totalAmountPIVX").text()));
 }
 
 function setAmountToSend(amount) {
@@ -236,7 +236,7 @@ function updateTxFee(numberOfInputs) {
 		numberOfInputs = 1;
 	}
 	lastKnownNumberOfInputs = numberOfInputs;
-	// COLX tx fee with 10 COLX/kb with default 226 byte tx for 1 input, 374 for 2 inputs (78+148*
+	// PIVX tx fee with 10 PIVX/kb with default 226 byte tx for 1 input, 374 for 2 inputs (78+148*
 	// inputs). All this is recalculated below and on the server side once number of inputs is known.
 	// Note zero fee is possible too, but might take up to 5 minutes to confirm.
 	var txFee = 0.78 + 1.48 * numberOfInputs;
@@ -249,10 +249,10 @@ function updateTxFee(numberOfInputs) {
 	// is already calculated above). Details on the /AboutPrivateSend help page
 	if ($("#usePrivateSend").is(':checked'))
 		txFee += 10 + 1 * getPrivateSendNumberOfInputsBasedOnAmount();
-	$("#txFeeCOLX").text(showNumber(txFee, 5));
+	$("#txFeePIVX").text(showNumber(txFee, 5));
 	$("#txFeeUsd").text(showNumber(txFee * usdRate, 4));
 	/*not needed
-	if (amountToSend < DUST_AMOUNT_IN_SATS || amountToSend > parseFloat($("#totalAmountCOLX").text()) ||
+	if (amountToSend < DUST_AMOUNT_IN_SATS || amountToSend > parseFloat($("#totalAmountPIVX").text()) ||
 		$("#usePrivateSend").is(':checked') && amountToSend < MinimumForPrivateSend) {
 		$("#generateButton").css("backgroundColor", "gray").attr("disabled", "disabled");
 		amountToSend = 0;
@@ -326,7 +326,7 @@ function isValidSendTo() {
 		return isValidRedditUsername(sendTo);
 	return false;
 }
-// Doesn't make much sense to send less than 10 COLX for Obfuscation (as fees will be >10-20%)
+// Doesn't make much sense to send less than 10 PIVX for Obfuscation (as fees will be >10-20%)
 var MinimumForPrivateSend = 10;
 function updateAmountInfo() {
 	var amount = parseFloat($("#amount").val());
@@ -340,14 +340,14 @@ function updateAmountInfo() {
 		amount /= eurRate;
 	amountToSend = amount;
 	if (//unused: amountToSend < DUST_AMOUNT_IN_SATS ||
-		amountToSend > parseFloat($("#totalAmountCOLX").text()) ||
+		amountToSend > parseFloat($("#totalAmountPIVX").text()) ||
 		$("#usePrivateSend").is(':checked') && amountToSend < MinimumForPrivateSend)
 		amountIsValid = false;
 	//not longer used or shown: var btcValue = showNumber(amountToSend * btcRate, 6);
 	$("#amount-info-box").text(
-		showNumber(amountToSend, 8) + " COLX " +
+		showNumber(amountToSend, 8) + " PIVX " +
 		"= $" + showNumber(amountToSend * usdRate, 2) + " " +
-		"= €" + showNumber(amountToSend * eurRate, 2) + " (1 COLX = " + btcRate + " BTC)");
+		"= €" + showNumber(amountToSend * eurRate, 2) + " (1 PIVX = " + btcRate + " BTC)");
 	updateTxFee(0);
 	if (amountIsValid && isValidSendTo()) {
 		$("#generateButton").css("backgroundColor", "#1c75bc").removeAttr("disabled");
@@ -376,15 +376,15 @@ function generateTransaction() {
 		$("#transactionPanel").hide();
 		$("#resultPanel").css("color", "red")
 			.text(($("#usePrivateSend").is(':checked') && parseFloat($("#amount").val()) < 1 ?
-				"Obfuscation transactions should be done with at least 10 COLX! " : "")+
+				"Obfuscation transactions should be done with at least 10 PIVX! " : "")+
 				"Please enter an amount you have and a valid address to send to. Unable to create transaction!");
 		return;
 	}
 	// Okay, we have all data ready, pick the oldest addresses until we have the required amount and
-	// find all unspend outputs and send it all to the MyColxWallet server to prepare the raw
+	// find all unspend outputs and send it all to the MyPIVXWallet server to prepare the raw
 	// transaction to sign. Doing this locally is possible too, but too much work right now.
 	$("#resultPanel").css("color", "yellow").text("Waiting for raw transaction to be generated ...");
-	addNextAddressWithUnspendFundsToRawTx(getAddressesWithUnspendFunds(), 0, colxKeystoreWallet.address, 0, [], [], [], "");
+	addNextAddressWithUnspendFundsToRawTx(getAddressesWithUnspendFunds(), 0, PIVXKeystoreWallet.address, 0, [], [], [], "");
 }
 
 var rawTx = "";
@@ -396,7 +396,7 @@ function addNextAddressWithUnspendFundsToRawTx(addressesWithUnspendInputs, addre
 		return;
 	}
 	//Find utxo
-	crossDomainAjax("https://chainz.cryptoid.info/colx/api.dws?q=unspent&key=904de45cd265&active=" +
+	crossDomainAjax("https://chainz.cryptoid.info/PIVX/api.dws?q=unspent&key=904de45cd265&active=" +
 		addressesWithUnspendInputs[addressesWithUnspendInputsIndex].address,
 		function (data) {
 			var address = addressesWithUnspendInputs[addressesWithUnspendInputsIndex].address;
@@ -409,9 +409,9 @@ function addNextAddressWithUnspendFundsToRawTx(addressesWithUnspendInputs, addre
 			//{"unspent_outputs":[{"tx_hash":"09f570876084b85adc85d330f4bbf6882686a6ca993660435b5369f5e77c1b20","tx_ouput_n":1,"value":"54000000000","confirmations":23,"script":"76a914c709efb02ac090b0c1e133bb68ca7027369a620188ac"}]}
 			var utxos = data["unspent_outputs"];
 			var thisAddressAmountToUse = 0;
-			var txFee = parseFloat($("#txFeeCOLX").text());
+			var txFee = parseFloat($("#txFeePIVX").text());
 			var totalAmountNeeded = amountToSend + txFee;
-			var maxAmountPossible = parseFloat($("#totalAmountCOLX").text());
+			var maxAmountPossible = parseFloat($("#totalAmountPIVX").text());
 			// If we send everything, subtract txFee so we can actually send everything
 			if (totalAmountNeeded >= maxAmountPossible)
 				totalAmountNeeded = maxAmountPossible;
@@ -427,11 +427,11 @@ function addNextAddressWithUnspendFundsToRawTx(addressesWithUnspendInputs, addre
 						break;
 				}
 			}
-			inputListText += "<li><a href='https://chainz.cryptoid.info/colx/address.dws?" + address + "' target='_blank' rel='noopener noreferrer'><b>" + address + "</b></a> (-" + showNumber(thisAddressAmountToUse) + " COLX)</li>";
+			inputListText += "<li><a href='https://chainz.cryptoid.info/PIVX/address.dws?" + address + "' target='_blank' rel='noopener noreferrer'><b>" + address + "</b></a> (-" + showNumber(thisAddressAmountToUse) + " PIVX)</li>";
 			if (txAmountTotal >= totalAmountNeeded) {
 				// Recalculate txFee like code above, now we know the actual number of inputs needed
 				updateTxFee(txToUse.length);
-				txFee = parseFloat($("#txFeeCOLX").text());
+				txFee = parseFloat($("#txFeePIVX").text());
 				totalAmountNeeded = amountToSend + txFee;
 				if (totalAmountNeeded >= maxAmountPossible)
 					totalAmountNeeded = maxAmountPossible;
@@ -456,9 +456,9 @@ function addNextAddressWithUnspendFundsToRawTx(addressesWithUnspendInputs, addre
 					$("#signButton").show();
 					// Update amountToSend in case we had to reduce it a bit to allow for the txFee
 					amountToSend = totalAmountNeeded - txFee;
-					var remainingCOLX = txAmountTotal - totalAmountNeeded;
+					var remainingPIVX = txAmountTotal - totalAmountNeeded;
 					crossDomainAjax("/GenerateRawTx?utxos=" + utxosTextWithOutputIndices + //"&channel=" + channel +
-						"&amount=" + showNumber(amountToSend, 8) + "&sendTo=" + sendTo.replace('#', '|')+"&remainingAmount="+showNumber(remainingCOLX, 8)+"&remainingAddress="+remainingAddress
+						"&amount=" + showNumber(amountToSend, 8) + "&sendTo=" + sendTo.replace('#', '|')+"&remainingAmount="+showNumber(remainingPIVX, 8)+"&remainingAddress="+remainingAddress
 						//+"&SwiftTX="+useInstantSend+"&Obfuscation="+usePrivateSend+"&extraText="+getChannelExtraText()
 					, function (data) {
 						var txHashes = data["txHashes"];
@@ -469,9 +469,9 @@ function addNextAddressWithUnspendFundsToRawTx(addressesWithUnspendInputs, addre
 						var rawTxList = showRawTxPanel(sendTo, txFee,
 							data["redirectedPrivateSendAddress"],
 							data["redirectedPrivateSendAmount"]);
-						$("<li>Using these inputs from your addresses for the required <b>" + showNumber(totalAmountNeeded) + " COLX</b> (including fees):<ol>" + inputListText + "</ol></li>").appendTo(rawTxList);
-						if (remainingCOLX > 0)
-							$("<li>The remaining "+showNumber(remainingCOLX)+" COLX will be send to your own receiving address: <a href='https://chainz.cryptoid.info/colx/address.dws?" + remainingAddress + "' target='_blank' rel='noopener noreferrer'><b>" + remainingAddress + "</b></a></li>").appendTo(rawTxList);
+						$("<li>Using these inputs from your addresses for the required <b>" + showNumber(totalAmountNeeded) + " PIVX</b> (including fees):<ol>" + inputListText + "</ol></li>").appendTo(rawTxList);
+						if (remainingPIVX > 0)
+							$("<li>The remaining "+showNumber(remainingPIVX)+" PIVX will be send to your own receiving address: <a href='https://chainz.cryptoid.info/PIVX/address.dws?" + remainingAddress + "' target='_blank' rel='noopener noreferrer'><b>" + remainingAddress + "</b></a></li>").appendTo(rawTxList);
 						signRawTxWithKeystore(txHashes, txOutputIndexToUse, rawTx, txFee);
 					}, function (error) {
 						$("#resultPanel").css("color", "red").text("Server Error: " + error);
@@ -493,8 +493,8 @@ function addNextAddressWithUnspendFundsToRawTx(addressesWithUnspendInputs, addre
 			else {
 				$("#transactionPanel").hide();
 				$("#resultPanel").css("color", "red").text("Insufficient funds, cannot send " +
-					totalAmountNeeded + " COLX (including tx fee), you only have " + maxAmountPossible +
-					" COLX. If you have COLX incoming, please wait until they are fully confirmed and show up on your account balance here. Unable to create transaction!");
+					totalAmountNeeded + " PIVX (including tx fee), you only have " + maxAmountPossible +
+					" PIVX. If you have PIVX incoming, please wait until they are fully confirmed and show up on your account balance here. Unable to create transaction!");
 			}
 		});
 }
@@ -503,7 +503,7 @@ function signRawTxWithKeystore(txHashes, txOutputIndexToUse, rawTx, txFee) {
 	//console.log("rawTx %O", rawTx);
 	var txFeeInDuffs = Math.round(txFee * 100000000);
 	//console.log("txFeeInDuffs %O", txFeeInDuffs);
-	signedTx = window.signRawTx(txHashes, txOutputIndexToUse, rawTx, txFeeInDuffs, CryptoJS.AES.decrypt(colxKeystoreWallet.d, colxKeystoreWallet.s).toString(CryptoJS.enc.Utf8));
+	signedTx = window.signRawTx(txHashes, txOutputIndexToUse, rawTx, txFeeInDuffs, CryptoJS.AES.decrypt(PIVXKeystoreWallet.d, PIVXKeystoreWallet.s).toString(CryptoJS.enc.Utf8));
 	//console.log("signed tx %O", signedTx);
 	if (signedTx.startsWith("Error")) {
 		$("#resultPanel").css("color", "red").text("Signing Transaction failed. " + signedTx);
@@ -520,20 +520,20 @@ function signAndSendTransaction() {
 	$("#transactionPanel").hide();
 	var useInstantSend = $("#useInstantSend").is(':checked');
 	var usePrivateSend = $("#usePrivateSend").is(':checked');
-	$("#resultPanel").css("color", "yellow").text("Sending signed transaction to the COLX network ..");
+	$("#resultPanel").css("color", "yellow").text("Sending signed transaction to the PIVX network ..");
 	crossDomainAjax("/SendSignedTx?signedTx=" + signedTx + "&SwiftTX=" + useInstantSend,
 		function (finalTx) {
 		$("#resultPanel").css("color", "orange").html(
-			"Successfully signed transaction and broadcasted it to the COLX network. "+
-			(useInstantSend ? "You used SwiftTX, the target wallet will immediately see incoming COLX." : "")+
-			"You can check the transaction status in a few minutes here: <a href='https://chainz.cryptoid.info/colx/tx.dws?" + finalTx+"' target='_blank' rel='noopener noreferrer'>"+finalTx+"</a>"+(usePrivateSend?getPrivateSendFinalHelp() : ""));
+			"Successfully signed transaction and broadcasted it to the PIVX network. "+
+			(useInstantSend ? "You used SwiftTX, the target wallet will immediately see incoming PIVX." : "")+
+			"You can check the transaction status in a few minutes here: <a href='https://chainz.cryptoid.info/PIVX/tx.dws?" + finalTx+"' target='_blank' rel='noopener noreferrer'>"+finalTx+"</a>"+(usePrivateSend?getPrivateSendFinalHelp() : ""));
 	}, function (error) {
 		$("#resultPanel").css("color", "red").text("Server Error: " + error);
 	});
 }
 
 function getPrivateSendFinalHelp() {
-	return "<br /><br/>Obfuscation transactions require mixing. Usually small amounts are available right away and will arrive on the given target address anonymously in a few minutes, but it could also take a few hours. Please be patient, if you still can't see the COLX arriving a day later please <a href='mailto:Support@MyColxWallet.org'>contact support</a> with all data listed here.";
+	return "<br /><br/>Obfuscation transactions require mixing. Usually small amounts are available right away and will arrive on the given target address anonymously in a few minutes, but it could also take a few hours. Please be patient, if you still can't see the PIVX arriving a day later please <a href='mailto:Support@MyPIVXWallet.org'>contact support</a> with all data listed here.";
 }
 
 function showRawTxPanel(toAddress, txFee, privateSendAddress, redirectedPrivateSendAmount) {
@@ -542,26 +542,26 @@ function showRawTxPanel(toAddress, txFee, privateSendAddress, redirectedPrivateS
 	var useInstantSend = $("#useInstantSend").is(':checked');
 	var usePrivateSend = $("#usePrivateSend").is(':checked');
 	if (usePrivateSend && toAddress !== privateSendAddress)
-		$("<li>Sending <b>" + showNumber(redirectedPrivateSendAmount) + " COLX</b> (with Obfuscation tx fees) to new autogenerated Obfuscation address <a href='https://chainz.cryptoid.info/colx/address.dws?" + privateSendAddress + "' target='_blank' rel='noopener noreferrer'><b>" + privateSendAddress + "</b></a>. When mixing is done (between right away and a few hours) <b>" + showNumber(amountToSend) + " COLX</b> will anonymously arrive at: <a href='https://chainz.cryptoid.info/colx/address.dws?" + toAddress + "' target='_blank' rel='noopener noreferrer'><b>" + toAddress + "</b></a></li>").appendTo(rawTxList);
+		$("<li>Sending <b>" + showNumber(redirectedPrivateSendAmount) + " PIVX</b> (with Obfuscation tx fees) to new autogenerated Obfuscation address <a href='https://chainz.cryptoid.info/PIVX/address.dws?" + privateSendAddress + "' target='_blank' rel='noopener noreferrer'><b>" + privateSendAddress + "</b></a>. When mixing is done (between right away and a few hours) <b>" + showNumber(amountToSend) + " PIVX</b> will anonymously arrive at: <a href='https://chainz.cryptoid.info/PIVX/address.dws?" + toAddress + "' target='_blank' rel='noopener noreferrer'><b>" + toAddress + "</b></a></li>").appendTo(rawTxList);
 	else if (toAddress !== privateSendAddress && privateSendAddress)
-		$("<li>Sending <b>" + showNumber(amountToSend) + " COLX</b> to "+getChannel()+": "+toAddress+" via <a href='https://chainz.cryptoid.info/colx/address.dws?" + privateSendAddress + "' target='_blank' rel='noopener noreferrer'><b>" + privateSendAddress + "</b></a></li>").appendTo(rawTxList);
+		$("<li>Sending <b>" + showNumber(amountToSend) + " PIVX</b> to "+getChannel()+": "+toAddress+" via <a href='https://chainz.cryptoid.info/PIVX/address.dws?" + privateSendAddress + "' target='_blank' rel='noopener noreferrer'><b>" + privateSendAddress + "</b></a></li>").appendTo(rawTxList);
 	else
-		$("<li>Sending <b>" + showNumber(amountToSend) + " COLX</b> to <a href='https://chainz.cryptoid.info/colx/address.dws?" + toAddress + "' target='_blank' rel='noopener noreferrer'><b>" + toAddress + "</b></a></li>").appendTo(rawTxList);
-	//$("<li>SwiftTX: <b>" + (useInstantSend ? "Yes" : "No") + "</b>, Obfuscation: <b>" + (usePrivateSend ? "Yes" : "No") + "</b>, Tx fee"+(usePrivateSend?" (for initial send to mix)":"")+": <b>" + showNumber(txFee) + " COLX</b> ($" + showNumber(txFee * usdRate, 4) + ")</li>").appendTo(rawTxList);
+		$("<li>Sending <b>" + showNumber(amountToSend) + " PIVX</b> to <a href='https://chainz.cryptoid.info/PIVX/address.dws?" + toAddress + "' target='_blank' rel='noopener noreferrer'><b>" + toAddress + "</b></a></li>").appendTo(rawTxList);
+	//$("<li>SwiftTX: <b>" + (useInstantSend ? "Yes" : "No") + "</b>, Obfuscation: <b>" + (usePrivateSend ? "Yes" : "No") + "</b>, Tx fee"+(usePrivateSend?" (for initial send to mix)":"")+": <b>" + showNumber(txFee) + " PIVX</b> ($" + showNumber(txFee * usdRate, 4) + ")</li>").appendTo(rawTxList);
 	return rawTxList;
 }
 
 function showTxDetails() {
 	$("#txDetailsPanel").prop('onclick',null).off('click');
 	$("#txDetailsPanel").html(
-		(rawTx !== "" ? "Confirm raw tx with any COLX node in the debug console:<br />decoderawtransaction " + rawTx + "<br />" : "") +
-		(signedTx !== "" ? "Signed tx send into the COLX network: " + signedTx : ""));
+		(rawTx !== "" ? "Confirm raw tx with any PIVX node in the debug console:<br />decoderawtransaction " + rawTx + "<br />" : "") +
+		(signedTx !== "" ? "Signed tx send into the PIVX network: " + signedTx : ""));
 	return false;
 }
 
 function getAddressesWithUnspendFunds() {
 	var addresses = [];
-	addresses.push({ addressIndex: 0, address: colxKeystoreWallet.address });
+	addresses.push({ addressIndex: 0, address: PIVXKeystoreWallet.address });
 	return addresses;
 }
 
@@ -612,7 +612,7 @@ function showFailure(errorMessage) {
 	$("#response").css("color", "red").html(errorMessage).show();
 }
 
-var colxKeystoreWallet;
+var PIVXKeystoreWallet;
 function createKeystoreWallet() {
 	$("#createKeystoreButton").attr("disabled", "disabled");
 	$("#createKeystoreOutput").html("<b>Successfully generated keystore wallet</b>, please secure it with a password now! Write this down somewhere, if you lose this you CANNOT access your keystore file, nobody can help you if you don't have your password and file.");
@@ -665,7 +665,7 @@ function generateKeystoreFile() {
 	var encryptedData = CryptoJS.AES.encrypt(key, $("#keystorePassword").val());
 	localStorage.setItem("keystore", encryptedData);
 	var currentDate = new Date();
-	download("MyColxWallet"+currentDate.getFullYear()+"-"+(currentDate.getMonth()+1)+"-"+currentDate.getDate()+".KeyStore", encryptedData);
+	download("MyPIVXWallet"+currentDate.getFullYear()+"-"+(currentDate.getMonth()+1)+"-"+currentDate.getDate()+".KeyStore", encryptedData);
 	$("#createLocalWalletPanel").hide();
 	$("#importKeystorePanel").hide();
 	$("#unlockKeystorePanel").show();
@@ -674,20 +674,20 @@ function generateKeystoreFile() {
 function unlockKeystore() {
 	try {
 		var encryptedData = localStorage.getItem("keystore");
-		colxKeystoreWallet = { d: encryptedData, s: $("#keystorePasswordUnlock").val() };
-		colxKeystoreWallet.address =
-			window.getDecryptedAddress(CryptoJS.AES.decrypt(colxKeystoreWallet.d, colxKeystoreWallet.s)
+		PIVXKeystoreWallet = { d: encryptedData, s: $("#keystorePasswordUnlock").val() };
+		PIVXKeystoreWallet.address =
+			window.getDecryptedAddress(CryptoJS.AES.decrypt(PIVXKeystoreWallet.d, PIVXKeystoreWallet.s)
 				.toString(CryptoJS.enc.Utf8));
-		if (!isValidAddress(colxKeystoreWallet.address))
-			showFailure("Invalid COLX address from decrypted keystore file, unable to continue: " + colxKeystoreWallet.address);
+		if (!isValidAddress(PIVXKeystoreWallet.address))
+			showFailure("Invalid PIVX address from decrypted keystore file, unable to continue: " + PIVXKeystoreWallet.address);
 		else {
 			goToSendPanel("Successfully unlocked Keystore Wallet!");
 			$("#paperWalletPanel").show();
 			generateReceivingAddressList();
-			crossDomainAjax("https://chainz.cryptoid.info/colx/api.dws?q=getbalance&a=" + colxKeystoreWallet.address,
+			crossDomainAjax("https://chainz.cryptoid.info/PIVX/api.dws?q=getbalance&a=" + PIVXKeystoreWallet.address,
 				function (data) {
 					if (data !== "ERROR: address invalid") {
-						//console.log("Updating balance of " + colxKeystoreWallet.address + ": " + data);
+						//console.log("Updating balance of " + PIVXKeystoreWallet.address + ": " + data);
 						addressBalance = parseFloat(data);
 						updateLocalStorageBalancesAndRefreshTotalAmountAndReceivingAddresses();
 						autoBalanceCheck = window.setInterval(tryBalanceCheck, 1000);
@@ -700,7 +700,7 @@ function unlockKeystore() {
 }
 
 function deleteKeystore() {
-	colxKeystoreWallet = undefined;
+	PIVXKeystoreWallet = undefined;
 	localStorage.removeItem("keystore");
 	$("#createLocalWalletPanel").show();
 	$("#unlockKeystorePanel").hide();
@@ -712,7 +712,7 @@ function deleteKeystore() {
 }
 
 function createPaperWallet() {
-	if ($("#paperWalletPasswordUnlock").val() !== colxKeystoreWallet.s) {
+	if ($("#paperWalletPasswordUnlock").val() !== PIVXKeystoreWallet.s) {
 		$("#paperWalletError").text("Invalid password, cannot unlock keystore wallet for PaperWallet!");
 		return;
 	}
@@ -723,7 +723,7 @@ function createPaperWallet() {
 	}
 	$("#createPaperWalletButton").text("Hide PaperWallet");
 	$("#paperWalletError").text("");
-	var hexa = CryptoJS.AES.decrypt(colxKeystoreWallet.d, colxKeystoreWallet.s).toString(CryptoJS.enc.Utf8);
+	var hexa = CryptoJS.AES.decrypt(PIVXKeystoreWallet.d, PIVXKeystoreWallet.s).toString(CryptoJS.enc.Utf8);
 	$("#privateKeyHexa").val(hexa);
 	var wif = window.toWifKey(hexa);
 	$("#privateKeyWif").val(wif);

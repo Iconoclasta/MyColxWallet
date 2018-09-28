@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "mycolxwallet.org": {
+    "mypivxwallet.org": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
