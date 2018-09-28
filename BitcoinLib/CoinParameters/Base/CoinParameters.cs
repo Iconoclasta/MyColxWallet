@@ -7,7 +7,7 @@ using System.Diagnostics;
 using BitcoinLib.Auxiliary;
 using BitcoinLib.Services.Coins.Base;
 using BitcoinLib.Services.Coins.Bitcoin;
-using BitcoinLib.Services.Coins.Colx;
+using BitcoinLib.Services.Coins.PIVX;
 using BitcoinLib.Services.Coins.Cryptocoin;
 using BitcoinLib.Services.Coins.Dash;
 using BitcoinLib.Services.Coins.Dogecoin;
@@ -295,21 +295,21 @@ namespace BitcoinLib.Services
 
                 #endregion
 				
-								#region Colx
+								#region PIVX
 
-								else if (coinService is ColxService)
+								else if (coinService is PIVXService)
 								{
 									if (!IgnoreConfigFiles)
 									{
-										DaemonUrl = ConfigurationManager.AppSettings.Get("Colx_DaemonUrl");
-										DaemonUrlTestnet = ConfigurationManager.AppSettings.Get("Colx_DaemonUrl_Testnet");
-										RpcUsername = ConfigurationManager.AppSettings.Get("Colx_RpcUsername");
-										RpcPassword = ConfigurationManager.AppSettings.Get("Colx_RpcPassword");
-										WalletPassword = ConfigurationManager.AppSettings.Get("Colx_WalletPassword");
+										DaemonUrl = ConfigurationManager.AppSettings.Get("PIVX_DaemonUrl");
+										DaemonUrlTestnet = ConfigurationManager.AppSettings.Get("PIVX_DaemonUrl_Testnet");
+										RpcUsername = ConfigurationManager.AppSettings.Get("PIVX_RpcUsername");
+										RpcPassword = ConfigurationManager.AppSettings.Get("PIVX_RpcPassword");
+										WalletPassword = ConfigurationManager.AppSettings.Get("PIVX_WalletPassword");
 									}
-									CoinShortName = "COLX";
-									CoinLongName = "ColossusXT Coin";
-									IsoCurrencyCode = "COLX";
+									CoinShortName = "PIVX";
+									CoinLongName = "Private Instant Verified X";
+									IsoCurrencyCode = "PIVX";
 
 									TransactionSizeBytesContributedByEachInput = 148;
 									TransactionSizeBytesContributedByEachOutput = 34;
@@ -326,7 +326,7 @@ namespace BitcoinLib.Services
 									EstimatedBlockGenerationTimeInMinutes = 2.7;
 									BlocksHighestPriorityTransactionsReservedSizeInBytes = 50000;
 
-									BaseUnitName = "ucolx";
+									BaseUnitName = "uPIV";
 									BaseUnitsPerCoin = 100000000;
 									CoinsPerBaseUnit = 0.00000001M;
 								}

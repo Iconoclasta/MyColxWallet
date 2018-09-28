@@ -1,4 +1,4 @@
-﻿namespace mycolxwallet.org.Models
+﻿namespace mypivxwallet.org.Models
 {
 	/// <summary>
 	/// Based on https://coinmarketcap.com/api/ e.g.: https://api.coinmarketcap.com/v1/ticker/bitcoin

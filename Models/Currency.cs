@@ -1,4 +1,4 @@
-﻿namespace mycolxwallet.org.Models
+﻿namespace mypivxwallet.org.Models
 {
 	public enum Currency
 	{
@@ -8,7 +8,7 @@
 		mLTC = 2,
 		mDASH = 3,
 		mBCH = 4,
-		COLX = 5,
+		PIVX = 5,
 		USD,
 		EUR
 	}

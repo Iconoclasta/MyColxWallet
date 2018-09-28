@@ -43,8 +43,8 @@
     <Compile Include="Auxiliary\Encoders\HexEncoder.cs" />
     <Compile Include="Auxiliary\GlobalConstants.cs" />
     <Compile Include="Auxiliary\Hashing.cs" />
-    <Compile Include="CoinParameters\Colx\ColxConstants.cs" />
-    <Compile Include="CoinParameters\Colx\IColxConstants.cs" />
+    <Compile Include="CoinParameters\PIVX\PIVXConstants.cs" />
+    <Compile Include="CoinParameters\PIVX\IPIVXConstants.cs" />
     <Compile Include="CoinParameters\Dash\DashConstants.cs" />
     <Compile Include="CoinParameters\Dash\IDashConstants.cs" />
     <Compile Include="CoinParameters\Dogecoin\DogecoinConstants.cs" />
@@ -123,8 +123,8 @@
     </Compile>
     <Compile Include="Services\Coins\Cryptocoin\CryptocoinService.cs" />
     <Compile Include="Services\Coins\Cryptocoin\ICryptocoinService.cs" />
-    <Compile Include="Services\Coins\Colx\ColxService.cs" />
-    <Compile Include="Services\Coins\Colx\IColxService.cs" />
+    <Compile Include="Services\Coins\PIVX\PIVXService.cs" />
+    <Compile Include="Services\Coins\PIVX\IPIVXService.cs" />
     <Compile Include="Services\Coins\Dash\AddressBalanceRequest.cs" />
     <Compile Include="Services\Coins\Dash\AddressBalanceResponse.cs" />
     <Compile Include="Services\Coins\Dash\DashService.cs" />

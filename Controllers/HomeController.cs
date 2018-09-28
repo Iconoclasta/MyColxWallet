@@ -1,68 +1,68 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using mycolxwallet.org.Models;
+using mypivxwallet.org.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
-namespace mycolxwallet.org.Controllers
+namespace mypivxwallet.org.Controllers
 {
 	public class HomeController : Controller
 	{
-		public HomeController(ColxNode node) => this.node = node;
-		private readonly ColxNode node;
+		public HomeController(PIVXNode node) => this.node = node;
+		private readonly PIVXNode node;
 
 		public async Task<IActionResult> Index()
 		{
-			await UpdateColxPrice();
+			await UpdatePIVXPrice();
 			return View();
 		}
 
-		private async Task UpdateColxPrice()
+		private async Task UpdatePIVXPrice()
 		{
-			var ticker = await CurrencyExtensions.GetTicker(Currency.COLX);
+			var ticker = await CurrencyExtensions.GetTicker(Currency.PIVX);
 			ViewData["UsdRate"] = ticker.price_usd;
 			ViewData["EurRate"] = ticker.price_eur;
 			ViewData["BtcRate"] = ticker.price_btc;
-			ViewData["Colx1kPrices"] = "$" + (ticker.price_usd * 1000m).ToString("#0.00") + " = €" +
+			ViewData["PIVX1kPrices"] = "$" + (ticker.price_usd * 1000m).ToString("#0.00") + " = €" +
 				(ticker.price_eur * 1000m).ToString("#0.00");
-			ViewData["ColxPrices"] = "$" + ticker.price_usd.ToString("#0.00##") + " = €" +
+			ViewData["PIVXPrices"] = "$" + ticker.price_usd.ToString("#0.00##") + " = €" +
 				ticker.price_eur.ToString("#0.00##");
 		}
 
 		public async Task<IActionResult> Address()
 		{
-			await UpdateColxPrice();
+			await UpdatePIVXPrice();
 			return View();
 		}
 
 		public async Task<IActionResult> Transaction()
 		{
-			await UpdateColxPrice();
+			await UpdatePIVXPrice();
 			return View();
 		}
 
 		public async Task<IActionResult> About()
 		{
-			await UpdateColxPrice();
+			await UpdatePIVXPrice();
 			return View();
 		}
 		
 		public async Task<IActionResult> AboutCreateNewWallet()
 		{
-			await UpdateColxPrice();
+			await UpdatePIVXPrice();
 			return View();
 		}
 		
 		public async Task<IActionResult> AboutTransactionFees()
 		{
-			await UpdateColxPrice();
+			await UpdatePIVXPrice();
 			return View();
 		}
 
 		public async Task<IActionResult> Error()
 		{
-			await UpdateColxPrice();
+			await UpdatePIVXPrice();
 			ViewData["RequestId"] = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
 			return View();
 		}
@@ -85,7 +85,7 @@ namespace mycolxwallet.org.Controllers
 		{
 			if (ex.Message == "No information available about transaction")
 				return StatusCode(500,
-					"Unable to generate raw tx, inputs are not found in the COLX blockchain " +
+					"Unable to generate raw tx, inputs are not found in the PIVX blockchain " +
 					"(are you on testnet or have an invalid address or transaction id?)");
 			if (ex.Message.Contains(
 				"16: mandatory-script-verify-flag-failed (Script failed an OP_EQUALVERIFY operation)"))
@@ -93,8 +93,8 @@ namespace mycolxwallet.org.Controllers
 					"unable to confirm signed transaction. Double spends are not allowed!<br/>Details";
 			errorMessage += ": " +
 #if DEBUG
-				ex.ToString().Replace("mycolxwallet.org.Controllers.HomeController+", "").
-					Replace("mycolxwallet.org.Controllers.HomeController.", "");
+				ex.ToString().Replace("mypivxwallet.org.Controllers.HomeController+", "").
+					Replace("mypivxwallet.org.Controllers.HomeController.", "");
 #else
 				ex.GetType().Name + ": " + ex.Message;
 #endif

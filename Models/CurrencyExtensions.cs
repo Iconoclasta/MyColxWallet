@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace mycolxwallet.org.Models
+namespace mypivxwallet.org.Models
 {
 	/// <summary>
 	/// Tons of features for the Currency enum, converting from strings, checking for valid addresses,
@@ -52,7 +52,7 @@ namespace mycolxwallet.org.Models
 
 		public static async Task<string> ToDollarString(this Currency currency, decimal milliCoinAmount)
 		{
-			decimal amount = currency == Currency.COLX ? milliCoinAmount
+			decimal amount = currency == Currency.PIVX ? milliCoinAmount
 				: ConvertFromMilliToFullCoinValue(milliCoinAmount);
 			var ticker = await GetTicker(currency);
 			return "$" + FormattedPrice(ticker.price_usd, amount);
@@ -71,7 +71,7 @@ namespace mycolxwallet.org.Models
 
 		public static async Task<string> ToEuroString(this Currency currency, decimal milliCoinAmount)
 		{
-			decimal amount = currency == Currency.COLX ? milliCoinAmount
+			decimal amount = currency == Currency.PIVX ? milliCoinAmount
 				: ConvertFromMilliToFullCoinValue(milliCoinAmount);
 			var ticker = await GetTicker(currency);
 			return FormattedPrice(ticker.price_eur, amount) + " €";
@@ -79,7 +79,7 @@ namespace mycolxwallet.org.Models
 
 		public static async Task<string> ToBitcoinString(this Currency currency, decimal milliCoinAmount)
 		{
-			decimal amount = currency == Currency.COLX ? milliCoinAmount
+			decimal amount = currency == Currency.PIVX ? milliCoinAmount
 				: ConvertFromMilliToFullCoinValue(milliCoinAmount);
 			var ticker = await GetTicker(currency);
 			var showMBtc = ticker.price_btc * amount < 0.01m;
@@ -146,7 +146,7 @@ namespace mycolxwallet.org.Models
 				return "bitcoin-cash";
 			case Currency.mDASH:
 				return "dash";
-			case Currency.COLX:
+			case Currency.PIVX:
 				return "colossusxt";
 			}
 			return currency.ToString();
@@ -166,7 +166,7 @@ namespace mycolxwallet.org.Models
 				return "Bitcoin Cash";
 			case Currency.mDASH:
 				return "Dash";
-			case Currency.COLX:
+			case Currency.PIVX:
 				return "ColossusCoinXT";
 			}
 			return currency.ToString();

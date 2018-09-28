@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using BitcoinLib.Requests.CreateRawTransaction;
 using BitcoinLib.Requests.SignRawTransaction;
 using BitcoinLib.Responses;
-using BitcoinLib.Services.Coins.Colx;
+using BitcoinLib.Services.Coins.PIVX;
 
-namespace mycolxwallet.org.Models
+namespace mypivxwallet.org.Models
 {
-	public class ColxNode
+	public class PIVXNode
 	{
-		public ColxNode(string server = "http://localhost:51573", string user = "your_username",
+		public PIVXNode(string server = "http://localhost:51573", string user = "your_username",
 			string password = "your_password", short requestTimeoutInSeconds = 60)
-			=> service = new ColxService(server, user, password, password, requestTimeoutInSeconds);
+			=> service = new PIVXService(server, user, password, password, requestTimeoutInSeconds);
 
-		protected readonly ColxService service;
+		protected readonly PIVXService service;
 		public decimal GetTotalBalance() => service.GetBalance("", -1, null);
 		
 		public virtual RawTxHashesAndRawTx TryGenerateRawTx(string utxos, decimal amount, string sendTo,
