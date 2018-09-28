@@ -1,7 +1,7 @@
 # MyPIVXWallet
-Web wallet for the ColossusXT cryptocurrency (PIVX) 
+Web wallet for the PIVX cryptocurrency (PIVX) 
 
-This project is based on MyEtherWallet and MyDashWallet, it is open-source, free to use and development was funded by PIVX team :)
+This project is based on MyEtherWallet and MyDashWallet, it is open-source, free to use and development was funded by COLX team :)
 
 # Runs locally
 You can simply download the website https://MyPIVXWallet.org and run it locally, the whole wallet functionality (including addresses, private keys and generating keystore wallets, unlocking, etc.) all runs offline and in your browser. However when you want to see the current PIVX amount or send out PIVX you need to be online as the website communicates with https://chainz.cryptoid.info for the PIVX amount in your addresses and will communicate with the full PIVX node on MyPIVXWallet when sending out locally signed transactions.
