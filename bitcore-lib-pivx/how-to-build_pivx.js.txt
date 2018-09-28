@@ -1,0 +1,8 @@
+get npm
+add browserify: npm install -g browserify
+add uglify: npm install -g uglify-js
+
+npm install
+browserify pivx.input.js | uglifyjs > ..\wwwroot\pivx.js
+
+or just double click the generate-pivx.js.cmd file once everything is setup.

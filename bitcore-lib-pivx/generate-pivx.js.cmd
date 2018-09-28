@@ -1,0 +1,1 @@
+browserify pivx.input.js | uglifyjs > ..\wwwroot\pivx.js
